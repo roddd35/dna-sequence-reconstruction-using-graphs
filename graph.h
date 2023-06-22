@@ -9,6 +9,9 @@ using namespace std;
 
 struct No{
     int size;
+    int intersection;   // stores the size of the intersection
+    bool isCircuit;
+    string color;
     string fragment;
     vector<No*> nodesList;
 };
@@ -26,5 +29,8 @@ class Graph {
         int getE();
         void readGraph();
         void printGraph();
+        void removeCircuit();
+        void isCircuit(Graph* G);
+        void isCircuitR(Graph* G, int v, string u);
         string getFragment(int indexI, int indexJ);
 };
