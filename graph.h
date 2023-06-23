@@ -1,5 +1,6 @@
 #pragma once
 
+#include <queue>
 #include <vector>
 #include <string>
 #include <fstream>
@@ -8,10 +9,9 @@
 using namespace std;
 
 struct No{
+    int vPos;
     int size;
     int intersection;   // stores the size of the intersection
-    bool isCircuit;
-    string color;
     string fragment;
     vector<No*> nodesList;
 };
@@ -29,8 +29,7 @@ class Graph {
         int getE();
         void readGraph();
         void printGraph();
-        void removeCircuit();
-        void isCircuit(Graph* G);
-        void isCircuitR(Graph* G, int v, string u);
-        string getFragment(int indexI, int indexJ);
+        void isCircuit();
+        void isCircuitR(int v, int* onStack, int* marked, queue<int>* q);
+        vector<No*> fixConnected(vector<No*> aux, int k);
 };
