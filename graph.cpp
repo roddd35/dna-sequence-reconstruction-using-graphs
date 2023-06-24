@@ -170,12 +170,90 @@ vector<No*> Graph::fixConnected(vector<No*> aux, int k){
     return aux;
 }
 
+void Graph::maxPath(){
+    int* marked = new int[this->V];
+    int* ini = new int[this->V];
+    int* fim = new int[this->V];
+    int cont = 0;
+
+    for(int i = 0; i < this->V; i++)
+        marked[i] = ini[i] = fim[i] = 0;
+    
+    for(int v = 0; v < this->V; v++)
+        if(!marked[v])
+            maxPathR(v, cont, ini, fim, marked);
+
+    int* sortArray = new int[this->V];
+    for(int i = 0; i < this->V; i++)
+        sortArray[i] = fim[i];
+    
+    sort(sortArray, sortArray + this->V, greater<int>());
+
+    No** sequencia = new No*[this->V];
+    for(int i = 0; i < this->V; i++){
+        int aux = fim[i];
+
+        for(int j = 0; j  < this->V; j++){
+            if(sortArray[j] == aux){
+                sequencia[j] = this->adjList[i];
+                break;
+            }
+        }
+    }
+
+    joinSequences(sequencia);
+}
+
+void Graph::maxPathR(int v, int& cont, int* ini, int* fim, int* marked){
+    marked[v] = 1;
+    ini[v] = cont;
+
+    for(int i = 0; i < this->adjList[v]->size; i++){
+        int u = this->adjList[v]->nodesList[i]->vPos;
+
+        if(!marked[u])
+            maxPathR(u, cont, ini, fim, marked);
+    }
+
+    cont += 1;
+    fim[v] = cont;
+}
+
+void Graph::joinSequences(No** sequencia){
+    // set the words correctly and show answer
+    for(int i = 0; i < this->V; i++){
+        int k = 0;
+        int digit = 0;
+        int copyDigit = 0;
+
+        if(i < this->V - 1){
+            while(digit < sequencia[i]->fragment.length() && sequencia[i]->fragment[digit] != sequencia[i + 1]->fragment[k])
+                digit++;
+            copyDigit = digit;
+
+            while(digit < sequencia[i]->fragment.length() && k < sequencia[i + 1]->fragment.length()){
+                if(sequencia[i]->fragment[digit] == sequencia[i + 1]->fragment[k]){
+                    digit++;
+                    k++;
+                }
+                else{
+                    k = 0;
+                    copyDigit++;
+                    digit = copyDigit;
+                }
+            }
+        }
+        for(int l = 0; l < sequencia[i]->fragment.length() - k; l++)
+            cout << sequencia[i]->fragment[l];
+    }
+    cout << endl;
+}
 
 void Graph::printGraph(){
     for(int i = 0; i < this->V; i++){
-        cout << "Original: " << this->adjList[i]->fragment << " /vértice: " << endl;
+        cout << "Original: " << this->adjList[i]->fragment << endl;
         for(int j = 0; j < this->adjList[i]->size; j++){
-            cout << "\aArco: " << this->adjList[i]->nodesList[j]->fragment << " /vértice " << endl;
+            cout << "\aArco: " << this->adjList[i]->nodesList[j]->fragment << endl;
         }
         cout << "\n-*- -*- -*- -*- -*- -*-\n" << endl;
     }

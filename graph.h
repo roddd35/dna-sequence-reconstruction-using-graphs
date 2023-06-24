@@ -27,9 +27,12 @@ class Graph {
         ~Graph();
         int getV();
         int getE();
+        void maxPath();
         void readGraph();
-        void printGraph();
         void isCircuit();
+        void printGraph();
+        void joinSequences(No** sequencia);
+        void maxPathR(int v, int& cont, int* ini, int* fim, int* marked);
         void isCircuitR(int v, int* onStack, int* marked, queue<int>* q);
         vector<No*> fixConnected(vector<No*> aux, int k);
 };
